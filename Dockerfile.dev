@@ -1,0 +1,29 @@
+# Development Dockerfile with hot reload
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S cragcrowd -u 1001
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies (including dev dependencies)
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Create logs directory with proper permissions
+RUN mkdir -p logs && chown -R cragcrowd:nodejs logs && chown -R cragcrowd:nodejs /app
+
+# Switch to non-root user
+USER cragcrowd
+
+# Expose port
+EXPOSE 3000
+
+# Start development server with hot reload
+CMD ["npm", "run", "dev"]
