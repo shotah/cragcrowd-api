@@ -1,6 +1,6 @@
 # CragCrowd API Makefile
 
-.PHONY: setup install build dev start test lint clean docker-build docker-run docker-stop
+.PHONY: setup install build dev start test lint clean docker-build docker-run docker-stop, upgrade-all
 
 # Default target
 all: setup build
@@ -56,6 +56,13 @@ lint-fix:
 typecheck:
 	@echo "Type checking..."
 	npm run typecheck
+
+# Upgrade all dependencies
+upgrade-all:
+	@echo "Upgrading all dependencies..."
+	npm i -g npm-check-updates
+	npx ncu -u
+	npm update
 
 # Clean build artifacts
 clean:
